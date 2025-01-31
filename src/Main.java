@@ -5,7 +5,7 @@
 
 /**
  *
- * @author Alessandro Stefanucci
+ * @author andrvtl
  */
 public class Client {
 
