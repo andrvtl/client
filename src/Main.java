@@ -7,7 +7,7 @@
  *
  * @author andrvtl
  */
-public class Client {
+public class Main {
 
     /**
      * @param args the command line arguments
@@ -16,6 +16,7 @@ public class Client {
 
         Client c = new Client("localhost");
         c.connetti("localhost",2000);
+        c.chiudi();
     }
 
 }
