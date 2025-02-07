@@ -2,6 +2,7 @@
 import java.io.IOException;
 import java.net.ConnectException;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,12 +23,13 @@ public class Client {
 
 
     public Client(String nome){
-
+        this.nome = nome;
 
     }
 
     public Client(String nome, String colore){
-
+        this.nome = nome;
+        this.colore = colore;
 
     }
 
@@ -38,7 +40,12 @@ public class Client {
             System.out.println("1) Connessione con il server avvenuta");
         }
         catch(ConnectException ex){
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             System.err.println("Errore di connessione, server non in ascolto");
+        }
+        catch (UnknownHostException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("Errore nella risoluzione del nome del server");
         }
         catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -59,8 +66,11 @@ public class Client {
                 socket.close();
                 System.out.println("5) Chiusura connessione avvenuta con successo");
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                System.err.println("Errore nella chiusura del socket");
             }
+        }
+        else{
+            System.out.println("Errore nella chiusura, socket non instanziato/rilevato");
         }
 
     }
