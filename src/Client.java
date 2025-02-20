@@ -1,8 +1,12 @@
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -21,6 +25,15 @@ public class Client {
     String colore;
     Socket socket;
 
+    public static final String BLUE = "\u001B[34m";
+    public static final String RESET = "\u001B[0m";
+
+    InputStream is;
+    Scanner streamIn = null;
+    OutputStream os;
+    PrintWriter streamOut = null;
+    String messaggioIn, messaggioOut;
+
 
     public Client(String nome){
         this.nome = nome;
@@ -38,6 +51,9 @@ public class Client {
         try {
             socket = new Socket(nomeServer, portaServer);
             System.out.println("1) Connessione con il server avvenuta");
+            System.out.println(BLUE + "Socket client: " + socket.getLocalSocketAddress() + RESET);
+            System.out.println("Socket server: " + socket.getRemoteSocketAddress());
+
         }
         catch(ConnectException ex){
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
@@ -56,7 +72,16 @@ public class Client {
 
 
     public void scrivi(){
-
+        try {
+            // Crea un oggetto output stream con la socket corrente
+            os = socket.getOutputStream();
+            streamOut = new PrintWriter(os);
+            // Scarica preventivamente
+            streamOut.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("Errore nell'inizializzazione dello stream di output");
+        }
 
     }
 
@@ -76,8 +101,18 @@ public class Client {
     }
 
     public void leggi(){
-
-
+        try {
+            is = socket.getInputStream();
+            streamIn = new Scanner(is);
+            messaggioIn = streamIn.nextLine();
+            System.out.println("Messaggio del server: " + messaggioIn);
+            messaggioOut="Eccomi!";
+            streamOut.println(messaggioOut);
+            streamOut.flush();
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            System.err.println("Errore nell'inizializzazione dello stream di input");
+        }
     }
 
 }
