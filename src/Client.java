@@ -40,11 +40,13 @@ public class Client {
 
     }
 
+    /*
     public Client(String nome, String colore){
         this.nome = nome;
         this.colore = colore;
 
     }
+    */
 
     public void connetti(String nomeServer, int portaServer){
 
@@ -76,8 +78,11 @@ public class Client {
             // Crea un oggetto output stream con la socket corrente
             os = socket.getOutputStream();
             streamOut = new PrintWriter(os);
-            // Scarica preventivamente
+
+            messaggioOut="Eccomi!";
+            streamOut.println(messaggioOut);
             streamOut.flush();
+
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             System.err.println("Errore nell'inizializzazione dello stream di output");
@@ -106,9 +111,7 @@ public class Client {
             streamIn = new Scanner(is);
             messaggioIn = streamIn.nextLine();
             System.out.println("Messaggio del server: " + messaggioIn);
-            messaggioOut="Eccomi!";
-            streamOut.println(messaggioOut);
-            streamOut.flush();
+
         } catch (IOException ex) {
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
             System.err.println("Errore nell'inizializzazione dello stream di input");
